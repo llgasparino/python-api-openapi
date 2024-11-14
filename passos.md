@@ -167,4 +167,8 @@ done
 echo "Multiple databases created"
 fi 
 ```
-    docker-compose up
+> docker-compose up
+
+## Configurando o BD Postgresql
+- Para isso configuramos os arquivos na pasta models dentro do nosso aplicativo, criamos as pastas user.py e ```__init__.py``` 
+-  
