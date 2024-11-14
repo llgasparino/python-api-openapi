@@ -87,7 +87,7 @@ Ele gera para nós o arquivo requirements.txt já com as versões.
     graft pamps
 
 ## Criamos o setup.py e colocamos algumas coisas padrão, para fazer o "pamps" virar um instalador também
-    pip instal -e .
+    pip install -e .
 
 setup.py
 import io 
@@ -166,3 +166,4 @@ setup(
     echo "Multiple databases created"
     fi 
     
+    docker-compose up
