@@ -12,6 +12,7 @@
 
 
 # Arquivos na raiz
+´´´bash
 touch setup.py
 touch {settings,.secrets}.toml
 touch {requirements,MANIFEST}.in
@@ -63,8 +64,9 @@ touch tests/{__init__,conftest,test_api}.py
 ├── conftest.py # Config do Pytest
 ├── __init__.py
 └── test_api.py # Tests da API
-
+´´´
 ## Adicionamos ao requirements.in
+´´´python
 fastapi
 uvicorn
 sqlmodel
@@ -77,7 +79,7 @@ python-multipart
 psycopg2-binary
 alembic
 rich
-
+´´´
 
 ## Usamos o pip-compile para automatizar a busca de versões compativeis com a nossa versão python
     pip-compile requirements.in
@@ -88,7 +90,7 @@ Ele gera para nós o arquivo requirements.txt já com as versões.
 
 ## Criamos o setup.py e colocamos algumas coisas padrão, para fazer o "pamps" virar um instalador também
     pip install -e .
-
+´´´python
 setup.py
 import io 
 import os
@@ -128,42 +130,41 @@ setup(
     }
 
 )
-
+´´´
 ## Configuramos o arquivo Dockerfile.dev
 
 # Subimos uma imagem docker do nosso aplicativo 
-    docker build -f Dockerfile.dev -t pamps:latest . 
-
-    docker run --rm -it -v $(pwd):/home/app/api -p 8000:8000 pamps
-
-    $ docker run -p 8000:8000 pamps
-
-    sudo setenforce 0
-
-    sudo chown -R $USER:$USER $(pwd)
-
+´´´bash
+docker build -f Dockerfile.dev -t pamps:latest . 
+docker run --rm -it -v $(pwd):/home/app/api -p 8000:8000 pamps
+$ docker run -p 8000:8000 pamps
+sudo setenforce 0
+sudo chown -R $USER:$USER $(pwd)
+´´´
 # Configurando o postgres
-    Criamos um shell script dentro da pasta 
-    #!/bin/bash
-    set -e
-    set -u 
 
-    function creater_user_and_database(){
-    local database=$1
-    echo "Creating user and database '$database'"
-    psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
-        CREATE USER $database PASSWORD '$database';
-        CREATE DATABASE $database;
-        GRANT ALL PRIVILEGES ON DATABASE $database TO $database;
-    EOSQL
-    }
+Criamos um shell script dentro da pasta 
+´´´shell
+#!/bin/bash
+set -e
+set -u 
 
-    if [ -n "$POSTGRES_DBS"]; then
-    echo "Creating DB(s): $POSTGRES_DBS"
-    for db in $(echo $POSTGRES_DBS | tr ',' ' '); do
-        creater_user_and_database $db
-    done
-    echo "Multiple databases created"
-    fi 
-    
+function creater_user_and_database(){
+local database=$1
+echo "Creating user and database '$database'"
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
+    CREATE USER $database PASSWORD '$database';
+    CREATE DATABASE $database;
+    GRANT ALL PRIVILEGES ON DATABASE $database TO $database;
+EOSQL
+}
+
+if [ -n "$POSTGRES_DBS"]; then
+echo "Creating DB(s): $POSTGRES_DBS"
+for db in $(echo $POSTGRES_DBS | tr ',' ' '); do
+    creater_user_and_database $db
+done
+echo "Multiple databases created"
+fi 
+´´´
     docker-compose up
