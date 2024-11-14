@@ -12,7 +12,7 @@
 
 
 # Arquivos na raiz
-´´´bash
+```bash
 touch setup.py
 touch {settings,.secrets}.toml
 touch {requirements,MANIFEST}.in
@@ -79,7 +79,7 @@ python-multipart
 psycopg2-binary
 alembic
 rich
-´´´
+```
 
 ## Usamos o pip-compile para automatizar a busca de versões compativeis com a nossa versão python
     pip-compile requirements.in
@@ -90,7 +90,7 @@ Ele gera para nós o arquivo requirements.txt já com as versões.
 
 ## Criamos o setup.py e colocamos algumas coisas padrão, para fazer o "pamps" virar um instalador também
     pip install -e .
-´´´python
+```python
 setup.py
 import io 
 import os
@@ -130,21 +130,21 @@ setup(
     }
 
 )
-´´´
+```
 ## Configuramos o arquivo Dockerfile.dev
 
 # Subimos uma imagem docker do nosso aplicativo 
-´´´bash
+```bash
 docker build -f Dockerfile.dev -t pamps:latest . 
 docker run --rm -it -v $(pwd):/home/app/api -p 8000:8000 pamps
 $ docker run -p 8000:8000 pamps
 sudo setenforce 0
 sudo chown -R $USER:$USER $(pwd)
-´´´
+```
 # Configurando o postgres
 
-Criamos um shell script dentro da pasta 
-´´´shell
+##Criamos um shell script dentro da pasta 
+```shell
 #!/bin/bash
 set -e
 set -u 
@@ -166,5 +166,5 @@ for db in $(echo $POSTGRES_DBS | tr ',' ' '); do
 done
 echo "Multiple databases created"
 fi 
-´´´
+```
     docker-compose up
